@@ -42,11 +42,11 @@ class Calendar
 
         $cal_text = $cal_text . "END:VCALENDAR";
 
-        $fileName = "cal_export/" . $this->calendarName . ".ics";
+        $fileName = __DIR__ . "/cal_export/" . $this->calendarName . ".ics";
         $file = fopen($fileName, 'w');
         fwrite($file, $cal_text);
         fclose($file);
-        echo "<p>File successfully saved. <a href='" . __DIR__  . $fileName . "' target='_blank'>$fileName</a></p>";
+        echo "<p>File successfully saved. <a href='"  . $fileName . "' target='_blank'>$fileName</a></p>";
 
     }
     private function createSummary($game) {
