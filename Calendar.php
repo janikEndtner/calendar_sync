@@ -42,8 +42,8 @@ class Calendar
 
         $cal_text = $cal_text . "END:VCALENDAR";
 
-        $fileName = __DIR__ . "/cal_export/" . $this->calendarName . ".ics";
-        $file = fopen($fileName, 'w');
+        $fileName = "/cal_export/" . $this->calendarName . ".ics";
+        $file = fopen(__DIR__ . $fileName, 'w');
         fwrite($file, $cal_text);
         fclose($file);
         echo "<p>File successfully saved. <a href='"  . $fileName . "' target='_blank'>$fileName</a></p>";
