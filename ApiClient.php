@@ -19,7 +19,8 @@ class ApiClient
             $client = new Google_Client();
             $client->setApplicationName('Manage HBC Calendars');
             $client->setScopes(Google_Service_Calendar::CALENDAR);
-            $client->setAuthConfig('credentials.json');
+            echo __DIR__ . 'credentials.json';
+            $client->setAuthConfig(__DIR__ . 'credentials.json');
             $client->setAccessType('offline');
             $client->setPrompt('select_account consent');
 
