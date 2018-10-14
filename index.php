@@ -5,6 +5,8 @@ include_once ("SHV_Api.php");
 include_once ("ApiClient.php");
 include_once ("Calendar.php");
 
+echo __DIR__;
+
 $api = new SHV_Api(AUTHORIZATION);
 $teams = $api->getTeams(CLUB_NUMBER);
 
