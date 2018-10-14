@@ -6,59 +6,65 @@
  * Time: 12:17
  */
 
-require_once 'ApiClient.php';
 
 class Calendar
 {
-    private $calendar;
+    private $calendarName;
+    private $teamId;
     private $games;
 
-    public function __construct($calendar)
+    public function __construct(string $teamName, string $teamId)
     {
-        $this->calendar = $calendar;
+        $this->calendarName = $teamName;
+        $this->teamId = $teamId;
     }
     public function setGames(array $games) {
         $this->games = $games;
     }
-    public function adaptFutureGamesIfNecessary() {
-        $gamesInCalendar = ApiClient::getFutureEvents($this->calendar->getId());
+    public function save() {
+        echo "<p>Saving calendar for $this->calendarName</p>";
+        $cal_text = "BEGIN:VCALENDAR \n
+                    VERSION:2.0 \n
+                    PRODID:-//hacksw/handcal//NONSGML v1.0//EN \n
+                    CALSCALE:GREGORIAN \n";
 
-        foreach ($gamesInCalendar as $gic) {
-            $found = null;
-            foreach ($this->games as $key=>$g) {
-                $dateGic = new DateTime($gic->getStart()->dateTime);
-                $dateG = new DateTime($g->gameDateTime);
-                $a = $dateGic->format("Y-m-d\TH:i:s.u") == $dateG->format('Y-m-d\TH:i:s.u');
-                $b = $gic->summary == $this->createSummary($g);
-                $c = $gic->location == $this->createLocation($g);
-                if ($a && $b && $c) {
-                        $found = $key;
-                }
-            }
-            if ($found != null) {
-                unset($this->games[$found]);
-            } else {
-                ApiClient::removeEvent($gic->id, $this->calendar->getId());
-            }
-        }
-        // add remaining games into calendar
         foreach ($this->games as $game) {
-            $summary = $this->createSummary($game);
-            $endDate = $this->createEndDate($game);
-            $location = $this->createLocation($game);
-            ApiClient::addEvent($game->gameDateTime, $endDate->format('c'), $summary, $location, $this->calendar->getId());
+            $cal_text = $cal_text . "BEGIN:VEVENT
+                    SUMMARY:" . $this->createSummary($game)
+                    . "LOCATION:" . $this->createLocation($game)
+                    . "DESCRIPTION:Allez HBC!"
+                    . "DTSTART:" . $this->createStartDate($game)
+                    . "DTEND:20170116T100000Z" . $this->createEndDate($game)
+                    . "DTSTAMP:" . $this->createTimeStamp()
+                    . "UID:" . uniqid()
+                    . "END:VEVENT";
         }
+
+        $cal_text = $cal_text . "END:VCALENDAR";
+
+        $fileName = "cal_export/" . $this->calendarName . ".ics";
+        $file = fopen($fileName, 'w');
+        fwrite($file, $cal_text);
+        fclose($file);
+        echo "<p>File successfully saved. <a href='" . __DIR__  . $fileName . "' target='_blank'>$fileName</a></p>";
 
     }
-
     private function createSummary($game) {
         return $game->teamAName . " vs. " . $game->teamBName;
     }
-    private function createEndDate($game) {
+    private function createStartDate($game): string {
+        $startDate = new DateTime($game->gameDateTime);
+        return $startDate->format("yyyyMMdd'T'HHmmss");
+    }
+    private function createEndDate($game): string {
         $endDate = new DateTime($game->gameDateTime, new DateTimeZone('Europe/Zurich'));
-        return $endDate->add(new DateInterval('PT2H'));
+        return $endDate->add(new DateInterval('PT2H'))->format("yyyyMMdd'T'HHmmss");
     }
     private function createLocation($game) {
         return $game->venue . " \n " . $game->venueAddress . ", " . $game->venueZip . " " . $game->venueCity;
+    }
+    private function createTimeStamp() {
+        $date = new DateTime("now", new DateTimeZone("Europe/Zurich"));
+        return $date->format("yyyyMMdd'T'HHmmss");
     }
 }

@@ -1,4 +1,3 @@
 .idea/
 config.php
-credentials.json
-token.json
+cal_export/
