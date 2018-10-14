@@ -23,24 +23,24 @@ class Calendar
     }
     public function save() {
         echo "<p>Saving calendar for $this->calendarName</p>";
-        $cal_text = "BEGIN:VCALENDAR \n
-                    VERSION:2.0 \n
-                    PRODID:-//hacksw/handcal//NONSGML v1.0//EN \n
-                    CALSCALE:GREGORIAN \n";
+        $cal_text = "BEGIN:VCALENDAR"
+                    . "\nVERSION:2.0"
+                    . "\nPRODID:-//hacksw/handcal//NONSGML v1.0//EN"
+                    . "\nCALSCALE:GREGORIAN";
 
         foreach ($this->games as $game) {
-            $cal_text = $cal_text . "BEGIN:VEVENT
-                    SUMMARY:" . $this->createSummary($game)
-                    . "LOCATION:" . $this->createLocation($game)
-                    . "DESCRIPTION:Allez HBC!"
-                    . "DTSTART:" . $this->createStartDate($game)
-                    . "DTEND:20170116T100000Z" . $this->createEndDate($game)
-                    . "DTSTAMP:" . $this->createTimeStamp()
-                    . "UID:" . uniqid()
-                    . "END:VEVENT";
+            $cal_text = $cal_text . "\nBEGIN:VEVENT"
+                    . "\nSUMMARY:" . $this->createSummary($game)
+                    . "\nLOCATION:" . $this->createLocation($game)
+                    . "\nDESCRIPTION:Allez HBC!"
+                    . "\nDTSTART:" . $this->createStartDate($game)
+                    . "\nDTEND:" . $this->createEndDate($game)
+                    . "\nDTSTAMP:" . $this->createTimeStamp()
+                    . "\nUID:" . uniqid()
+                    . "\nEND:VEVENT";
         }
 
-        $cal_text = $cal_text . "END:VCALENDAR";
+        $cal_text = $cal_text . "\nEND:VCALENDAR";
 
         $fileName = "/cal_export/" . $this->calendarName . ".ics";
         $file = fopen(__DIR__ . $fileName, 'w');
@@ -54,17 +54,17 @@ class Calendar
     }
     private function createStartDate($game): string {
         $startDate = new DateTime($game->gameDateTime);
-        return $startDate->format("yyyyMMdd'T'HHmmss");
+        return $startDate->format("Ymd\THis\Z");
     }
     private function createEndDate($game): string {
         $endDate = new DateTime($game->gameDateTime, new DateTimeZone('Europe/Zurich'));
-        return $endDate->add(new DateInterval('PT2H'))->format("yyyyMMdd'T'HHmmss");
+        return $endDate->add(new DateInterval('PT2H'))->format("Ymd\THis\Z");
     }
     private function createLocation($game) {
-        return $game->venue . " \n " . $game->venueAddress . ", " . $game->venueZip . " " . $game->venueCity;
+        return $game->venue . ", " . $game->venueAddress . ", " . $game->venueZip . " " . $game->venueCity;
     }
     private function createTimeStamp() {
         $date = new DateTime("now", new DateTimeZone("Europe/Zurich"));
-        return $date->format("yyyyMMdd'T'HHmmss");
+        return $date->format("Ymd\THis\Z");
     }
 }
