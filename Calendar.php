@@ -33,9 +33,9 @@ class Calendar
                     . "\nSUMMARY:" . $this->createSummary($game)
                     . "\nLOCATION:" . $this->createLocation($game)
                     . "\nDESCRIPTION:Allez HBC!"
-                    . "\nDTSTART:" . $this->createStartDate($game)
-                    . "\nDTEND:" . $this->createEndDate($game)
-                    . "\nDTSTAMP:" . $this->createTimeStamp()
+                    . "\nDTSTART;TZID=Europe/Zurich:" . $this->createStartDate($game)
+                    . "\nDTEND;TZID=Europe/Zurich:" . $this->createEndDate($game)
+                    . "\nDTSTAMP;TZID=Europe/Zurich:" . $this->createTimeStamp()
                     . "\nUID:" . uniqid()
                     . "\nEND:VEVENT";
         }
