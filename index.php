@@ -10,7 +10,9 @@ $api = new SHV_Api(AUTHORIZATION);
 $teams = $api->getTeams(CLUB_NUMBER);
 
 foreach ($teams as $team) {
-    $teamCalendar = new Calendar($team->groupText, $team->teamId);
+    $groupText = $team->groupText;
+    $teamName = substr($groupText, 0, strpos($groupText, "-"));
+    $teamCalendar = new Calendar($teamName, $team->teamId);
 
     // get future games from SHV api
     $games = $api->getPlannedGames($team->teamId);
