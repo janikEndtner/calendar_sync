@@ -19,6 +19,11 @@ class SHV_Api
         $url = "http://api.handball.ch/rest/v1/clubs/140336/teams/$teamId/games?status=planned";
         return json_decode($this->getDataFromApi($url));
     }
+    public function getPlayedGames(int $teamId)
+    {
+        $url = "http://api.handball.ch/rest/v1/clubs/140336/teams/$teamId/games?status=played";
+        return json_decode($this->getDataFromApi($url));
+    }
 
     public function getTeams(int $club): array {
         $url = "http://api.handball.ch/rest/v1/clubs/$club/teams";

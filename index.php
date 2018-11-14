@@ -15,8 +15,9 @@ foreach ($teams as $team) {
     $teamCalendar = new Calendar($teamName, $team->teamId);
 
     // get future games from SHV api
-    $games = $api->getPlannedGames($team->teamId);
-    $teamCalendar->setGames($games);
+    $gamesPlanned = $api->getPlannedGames($team->teamId);
+    $gamesPlayed = $api->getPlayedGames($team->teamId);
+    $teamCalendar->setGames(array_merge($gamesPlayed, $gamesPlanned));
     $teamCalendar->save();
 
 }

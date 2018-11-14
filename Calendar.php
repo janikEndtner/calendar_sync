@@ -32,7 +32,7 @@ class Calendar
             $cal_text = $cal_text . "\nBEGIN:VEVENT"
                     . "\nSUMMARY:" . $this->createSummary($game)
                     . "\nLOCATION:" . $this->createLocation($game)
-                    . "\nDESCRIPTION:Allez HBC!"
+                    . "\nDESCRIPTION:" . $this->getDescription($game)
                     . "\nDTSTART;TZID=Europe/Zurich:" . $this->createStartDate($game)
                     . "\nDTEND;TZID=Europe/Zurich:" . $this->createEndDate($game)
                     . "\nDTSTAMP;TZID=Europe/Zurich:" . $this->createTimeStamp()
@@ -66,5 +66,13 @@ class Calendar
     private function createTimeStamp() {
         $date = new DateTime("now", new DateTimeZone("Europe/Zurich"));
         return $date->format("Ymd\THis\Z");
+    }
+    private function getDescription($game) {
+        if ($game->gameStatus == 'Gespielt') {
+            return $game->teamAName . " vs. " . $game->teamBName . " (" . $game->teamAScoreFT . ":"
+                . $game->teamBScoreFT . ")";
+        } else {
+            return "Allez HBC!";
+        }
     }
 }
