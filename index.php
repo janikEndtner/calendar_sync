@@ -20,8 +20,7 @@ foreach ($teams as $team) {
 // genaue kalender: z.B. M2-06 wird unter M2-06 gespeichert. Falls die Gruppe wechselt, muss der Kalender
 // im nächsten Jahr neu abboniert werden. Kann insbesondere dann verwendet werden, wenn mehrere Teams gleich heissen
 foreach ($teams as $team) {
-    $groupText = $team->groupText;
-    $teamName = $groupText;
+    $teamName = $team->groupText . "_" . $team->teamId;
     createCalendarForTeam($team, $teamName, $api);
 }
 
