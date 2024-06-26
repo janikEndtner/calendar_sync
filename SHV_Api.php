@@ -16,9 +16,9 @@ class SHV_Api
         $this->authorization = $authorization;
     }
 
-    public function getPlannedGames(int $teamId)
+    public function getGames(int $teamId)
     {
-        $url = self::$SHV_API . "clubs/140336/teams/$teamId/games?status=planned";
+        $url = self::$SHV_API . "clubs/140336/teams/$teamId/games";
         return json_decode($this->getDataFromApi($url));
     }
     public function getPlayedGames(int $teamId)

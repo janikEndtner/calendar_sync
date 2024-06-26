@@ -28,9 +28,8 @@ function createCalendarForTeam($team, $teamName, $api) {
     $teamCalendar = new Calendar($teamName, $team->teamId);
 
     // get future games from SHV api
-    $gamesPlanned = $api->getPlannedGames($team->teamId);
-    $gamesPlayed = $api->getPlayedGames($team->teamId);
-    $teamCalendar->setGames(array_merge($gamesPlayed, $gamesPlanned));
+    $gamesPlanned = $api->getGames($team->teamId);
+    $teamCalendar->setGames($gamesPlanned);
     $teamCalendar->save();
 }
 
