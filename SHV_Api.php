@@ -9,7 +9,7 @@
 class SHV_Api
 {
     private $authorization;
-    public static $SHV_API= "https://clubapi-test.handball.ch/rest/v1/";
+    public static $SHV_API= "https://clubapi.handball.ch/rest/v1/";
 
     public function __construct(string $authorization)
     {
